@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block body %}
+<h2>Welcome to FriendFork!</h2>
+
+FriendFork is a social disaggregation service to make it easier to consume FriendFeed
+in Google Reader (It may be useful with other feed readers too, but Reader is the
+primary target).  FriendFork makes several changes to the feeds produced by
+FriendFeed:
+<ul>
+  <li>Produces multiple feeds, one for each friend group you specify (so you
+  can, for example, "mark all as read" in one group without affecting
+  others.</li>
+  <li>Hides Reader shared items that have no likes or comments.  These items are
+  replaced with a pointer to the user's Reader shared page so you can
+  subscribe (these links show up only once per user).</li>
+  <li>Embeds YouTube videos so they can be played inline.</li>
+  <li>Minor formatting tweaks.  For example, a timestamp is shown after each
+  comment.</li>
+</ul>
+
+<p>FriendFork is currently in an experimental phase of development.
+There are sure to be bugs, the interface is rather user-unfriendly,
+and there may be disruptive changes (such as a change to the feed urls
+used).  Subscribe to <a href="http://friendfork.blogspot.com">the
+FriendFork blog</a> to get announcements about any significant
+changes.</p>
+
+<p><a href="/manage">Click here to sign in and get started.</a></p>
+
+<p></p>
+<p>Disclaimer: FriendFork is not affiliated with either FriendFeed or
+Google.</p>
+{% endblock %}

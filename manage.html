@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block body %}
+
+<form action="/save" method = "post">
+
+<h3>FriendFeed account information</h3>
+<!-- This table section was copied from
+http://friendfeed.com/static/html/remotelogin.html
+"nickname or email" was changed to "nickname", defaults were added to
+the input fields, and the submit button was removed.
+-->
+  <table style="border-collapse: collapse; border-spacing: 0; padding: 0; margin: 0; font-family: Arial, sans-serif; border: 4px solid #6797d3; color: #222222">
+
+    <tr>
+      <td style="background-color: #ecf2fa; padding: 3px; padding-left: 5px; padding-top: 5px; border: 0; border-bottom: 1px solid #6797d3"><a href="http://friendfeed.com/" target="_blank"><img src="http://friendfeed.com/static/images/logo-api.png" width="160" height="34" alt="FriendFeed" style="padding:0; border:0; margin:0"/></a></td>
+      <td style="background-color: #ecf2fa; padding: 3px; padding-right: 20px; border: 0; border-bottom: 1px solid #6797d3; text-align: right; vertical-align: middle; font-size: 16pt; font-weight: bold; color: gray">remote login</td>
+    </tr>
+    <tr>
+      <td style="background-color: white; padding: 15px; border: 0" colspan="2">
+        <table style="border-collapse: collapse; border-spacing: 0; border: 0; padding: 0; margin: 0">
+          <tr>
+
+            <td style="border: 0; padding: 5px; font-size: 10pt">FriendFeed nickname:</td>
+	    <td style="border: 0; padding: 5px; font-size: 10pt"><input type="text" name="friendfeed_nickname" style="width: 10em" value="{{config.friendfeed_nickname|default:""|escape}}"/></td>
+	  </tr>
+	  <tr>
+	    <td style="border: 0; padding: 5px; font-size: 10pt">Remote key [ <a href="http://friendfeed.com/remotekey" style="color: #1030cc" target="_blank">find your key</a> ]:</td>
+	    <td style="border: 0; padding: 5px; font-size: 10pt"><input type="password" name="friendfeed_remote_key" style="width: 10em" value="{{config.friendfeed_remote_key|default:""|escape}}"/></td>
+
+	  </tr>
+	  <tr>
+	    <td style="border: 0; padding: 0; padding-right: 5px; padding-top: 8px; text-align: right" colspan="2"></td>
+	  </tr>
+	</table>
+      </td>
+    </tr>
+  </table>
+
+{% if friend_groups %}
+<h3>Friend groups</h3>
+
+<p>Define your friend groups here.  List one group per line, with the group
+  name, a colon, and then comma-separated nicknames of the users in the group.
+  For example,
+  <blockquote><pre>Friends: jsmith, kthompson
+Coworkers: larry, moe, curly</pre></blockquote>
+  For reference, your friends and their nicknames are displayed below the
+  text box.  A group named "Other" is automatically created for any friends
+  that don't match any group you've set up.</p>
+
+  <p>Once you have created your groups, the group names below point to feeds
+  for that group, which you can subscribe to in Reader.</p>
+  
+<textarea name="friend_group_spec" rows="10" cols="50">{{config.friend_group_spec|default:""|escape}}</textarea><p>
+
+<ul>
+{% for group in friend_groups.items %}
+  <li><a href="/feed?id={{config.url_token|escape}}&amp;group={{group.0|escape}}">{{group.0|escape}}</a>
+    <ul>
+      {% for friend in group.1 %}
+        <li>{{friend.nickname|escape}} ({{friend.name|escape}})</li>
+      {% endfor %}
+    </ul>
+  </li>
+{% endfor %}
+</ul>
+
+{% endif %}
+
+<input type="submit" value="Submit">
+</form>
+
+{% endblock %}

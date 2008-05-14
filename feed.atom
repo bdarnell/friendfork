@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
+<title type="text">FriendFork: {{group_name|escape}}</title>
+<!--updated, id, link rel=alternate, link rel=self,author-->
+
+{% for entry in entries %}
+<entry>
+  <title type="text">{{entry.user.name|escape}} on {{entry.service.name|escape}}: {{entry.title|escape}}</title>
+  <id>tag:friendfeed.com,2007:{{entry.id|escape}}</id>
+  <link href="{{entry.link|escape}}"/>
+  <content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml">
+  {% for media in entry.media %}
+    {% for thumbnail in media.thumbnails %}
+      {% if forloop.first %}<img src="{{thumbnail.url|escape}}" width="{{thumbnail.width|escape}}" height="{{thumbnail.height|escape}}" title="{{media.title|escape}}"/> {%endif%}
+    {% endfor %}
+    {% for content in media.content %}
+      {% if forloop.first %}{% ifequal content.type "application/x-shockwave-flash" %}
+        <embed src="content.url"></embed>
+      {% endifequal %}{% endif %}
+    {% endfor %}
+  {% endfor %}
+
+  {% if entry.comments %}
+    <ul>
+    {% for comment in entry.comments %}
+      <li>{% render_user mapper comment.user %}:
+      {{comment.body|escape}} ({{comment.date|isoparse|timesince}} ago)</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+
+  {% if entry.likes %}
+    <p>
+    {% for like in entry.likes %}
+      {% render_user mapper like.user %}{% if not forloop.last %},{% endif %}
+    {% endfor %}
+    liked this.
+    </p>
+  {% endif %}
+
+  </div></content>
+</entry>
+{% endfor %}
+
+{% for user in reader_users.items %}
+<entry>
+  <id>tag:eclectic-mayhem.com,2008:friendfork-reader-user-{{user.0|escape}}</id>
+  <link rel="alternate" href="http://www.google.com/reader/shared/{{user.0|escape}}" />
+  <title type="text">{{user.1.name|escape}}'s shared items on Reader</title>
+  <content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml">
+    {{user.1.name|escape}} is sharing items on Reader.
+    <a href="http://www.google.com/reader/shared/{{user.0|escape}}">Click here</a>
+    to subscribe (these shared items will not be shown by FriendFork unless 
+    they have been "liked" or commented on).
+  </div></content>
+</entry>
+{% endfor %}
+
+</feed>

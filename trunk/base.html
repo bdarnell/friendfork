@@ -1,0 +1,20 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title>FriendFork</title>
+</head>
+
+<body>
+<p align="right">
+{% if user %}
+  <b>{{user.email}}</b> | <a href="{{logout_url}}">Sign out</a>
+{% else %}
+  <a href="{{login_url}}">Sign in</a>
+{% endif %}
+</p>
+<h1>FriendFork</h1>
+
+{% block body %}
+{% endblock %}
+
+
+</body> </html>

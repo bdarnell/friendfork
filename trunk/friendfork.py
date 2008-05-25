@@ -1,9 +1,10 @@
 import datetime 
 import os
 import random
+import re
 import wsgiref.handlers
 
-from django.utils.simplejson import decoder
+from django.utils import simplejson
 
 from google.appengine.api import urlfetch
 from google.appengine.api import users
@@ -105,7 +106,18 @@ class BaseHandler(webapp.RequestHandler):
 		url,
 		headers={'Authorization': 'Basic ' + encoded_auth})
 	    if result.status_code == 200:
-		return decoder.JSONDecoder().decode(result.content)
+		# HACK: Friendfeed's json output occasionally includes \x
+		# escapes.  While these are valid python and valid javascript,
+		# they are not valid json and simplejson will throw an
+		# exception when it sees them.  Translate \x escapes to the
+		# standard \u equivalent. 
+		# This regular expression is kind of gross, but it gets
+		# the job done (mostly - it will fail in the hopefully rare
+		# case of a literal backslash followed by a character encoded
+		# in a \x escape).
+		fixed_data = re.sub(r'(^|[^\\])\\x(..)', r'\1\u00\2', 
+				    result.content)
+		return simplejson.loads(fixed_data)
 	    else:
 		print result
 		raise RuntimeError("http error: %d" % result.status_code)

@@ -15,7 +15,12 @@
     {% endfor %}
     {% for content in media.content %}
       {% if forloop.first %}{% ifequal content.type "application/x-shockwave-flash" %}
-        <embed src="content.url"></embed>
+      <object>
+	<param name="movie" value="{{content.url}}"></param>
+	<param name="wmode" value="transparent"></param>
+	<embed src="{{content.url}}" type="application/x-shockwave-flash" 
+	       wmode="transparent"></embed>
+      </object>
       {% endifequal %}{% endif %}
     {% endfor %}
   {% endfor %}

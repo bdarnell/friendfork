@@ -38,6 +38,7 @@
     </p>
   {% endif %}
 
+  <a href="http://friendfeed.com/e/{{entry.id|escape}}">Like/Comment</a>
   </div></content>
 </entry>
 {% endfor %}

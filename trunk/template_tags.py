@@ -29,13 +29,15 @@ def render_id(mapper, entry):
       user.
     """
     posted_by_me = entry['user']['nickname'] == mapper.get_my_name()
-    liked_by_me = (like['user']['nickname'] == mapper.get_my_name() 
-                   for like in entry['likes'])
-    commented_by_me = (comment['user']['nickname'] == mapper.get_my_name()
-                       for comment in entry['comments'])
+    for i in entry['likes'] + entry['comments']:
+        if i['user']['nickname'] == mapper.get_my_name():
+            liked_or_commented_by_me = True
+            break
+    else:
+        liked_or_commented_by_me = False
     
     want_likes = posted_by_me
-    want_all_comments = posted_by_me or liked_by_me or commented_by_me
+    want_all_comments = posted_by_me or liked_or_commented_by_me
 
     def latest_timestamp(seq, init):
         """Given a sequence of json objects with a date field and an initial
@@ -55,8 +57,8 @@ def render_id(mapper, entry):
     if want_all_comments:
         interesting_comments = entry['comments']
     else:
-        interesting_comments = (c for c in entry['comments'] 
-                                if mapper.is_friend(c['user']['nickname']))
+        interesting_comments = [c for c in entry['comments'] 
+                                if mapper.is_friend(c['user']['nickname'])]
     timestamp = latest_timestamp(interesting_comments, timestamp)
 
     if timestamp is None:

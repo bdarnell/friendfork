@@ -6,7 +6,7 @@
 {% for entry in entries %}
 <entry>
   <title type="text">{{entry.user.name|escape}} on {{entry.service.name|escape}}: {{entry.title|escape}}</title>
-  <id>tag:friendfeed.com,2007:{{entry.id|escape}}</id>
+  <id>{% render_id mapper entry %}</id>
   <link href="{{entry.link|escape}}"/>
   <content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml">
   {% for media in entry.media %}

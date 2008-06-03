@@ -16,6 +16,7 @@ UNKNOWN_GROUP_NAME = "Strangers"
 
 class GroupMapper:
     def __init__(self, desc, profile_json):
+        self.__my_name = profile_json['nickname']
 	# self.__map = {groupname: [username, username...]}
 	self.__map = {}
 	# self.__index = {username: groupname}
@@ -50,8 +51,11 @@ class GroupMapper:
 	self.__group_index[UNKNOWN_GROUP_NAME] = group_index
 	group_index = group_index + 1
 
+    def get_my_name(self):
+        return self.__my_name
+
     def get_group_for_user(self, user):
-	if not user in self.__friends:
+	if not self.is_friend(user):
 	    return UNKNOWN_GROUP_NAME
 	if user in self.__index:
 	    return self.__index[user]
@@ -65,7 +69,7 @@ class GroupMapper:
 	    return g2
 
     def is_friend(self, user):
-	return user in self.__friends
+	return user == self.__my_name or user in self.__friends
 
 class BaseHandler(webapp.RequestHandler):
     def base_template_vars(self):

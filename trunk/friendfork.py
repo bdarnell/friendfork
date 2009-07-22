@@ -111,8 +111,9 @@ class BaseHandler(webapp.RequestHandler):
 	    if result.status_code == 200:
 		return simplejson.loads(result.content)
 	    else:
-		print result
-		raise RuntimeError("http error: %d" % result.status_code)
+		raise RuntimeError("http error %d.  headers: %s. content: %s" %
+                                   (result.status_code, `result.headers`,
+                                    result.content))
 	else:
 	    return None
 

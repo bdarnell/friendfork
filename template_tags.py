@@ -15,7 +15,27 @@ def render_user(mapper, user):
     return {'user': user,
 	    'group': mapper.get_group_for_user(user['nickname']),
 	    'is_friend': mapper.is_friend(user['nickname']),
+            # shorthand since django templates can't do 'if not', 
+            # only 'if {} else'
+	    'not_friend': not mapper.is_friend(user['nickname']),
 	    }
+
+@register.inclusion_tag('comment.html')
+def render_comment(mapper, comment):
+    user = comment['user']
+    return {'mapper': mapper,
+            'comment': comment,
+            # TODO(bdarnell): how to factor these out?
+            'is_friend': mapper.is_friend(user['nickname']),
+            'not_friend': not mapper.is_friend(user['nickname']),
+            }
+
+@register.filter(name="comment_link_filter")
+def comment_link_filter(body_string, is_friend):
+    if is_friend:
+        return body_string
+    else:
+        return body_string.replace('<a href=', '<a style="color:#77f" href=')
 
 @register.simple_tag
 def render_id(mapper, entry):

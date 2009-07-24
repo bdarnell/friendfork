@@ -1,2 +1,4 @@
 {% if is_friend %}[{{group|escape}}]{% endif %}
-<a href="{{user.profileUrl|escape}}">{{user.name|escape}}</a>
+<a href="{{user.profileUrl|escape}}"
+  {% if not_friend %}style="color:#77f"{% endif %}
+  >{{user.name|escape}}</a>

@@ -28,8 +28,7 @@
   {% if entry.comments %}
     <ul>
     {% for comment in entry.comments %}
-      <li>{% render_user mapper comment.user %}:
-      {{comment.body|escape|urlize}} ({{comment.date|isoparse|timesince}} ago)</li>
+      {% render_comment mapper comment %}
     {% endfor %}
     </ul>
   {% endif %}

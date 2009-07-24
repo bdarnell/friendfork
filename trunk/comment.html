@@ -1,0 +1,4 @@
+<li {% if not_friend %}style="color:#777"{% endif %}
+  >{% render_user mapper comment.user %}:
+{{comment.body|escape|urlize|comment_link_filter:is_friend}}
+  ({{comment.date|isoparse|timesince}} ago)</li>

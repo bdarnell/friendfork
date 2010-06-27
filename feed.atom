@@ -9,7 +9,7 @@
   <id>{% render_id mapper entry %}</id>
   <link href="{{entry.link|escape}}"/>
   <content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml">
-  {{ entry.title|escape|urlize }}<br>
+  {{ entry.title|escape|urlize }}<br/>
   {% for media in entry.media %}
     {% for thumbnail in media.thumbnails %}
       {% if forloop.first %}<img src="{{thumbnail.url|escape}}" width="{{thumbnail.width|escape}}" height="{{thumbnail.height|escape}}" title="{{media.title|escape}}"/> {%endif%}

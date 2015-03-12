@@ -1,0 +1,1 @@
+FriendFork is a social disaggregation service to make it easier to consume FriendFeed in Google Reader (It may be useful with other feed readers too, but Reader is the primary target).
